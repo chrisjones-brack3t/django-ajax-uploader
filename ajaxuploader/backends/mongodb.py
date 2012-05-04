@@ -27,10 +27,9 @@ class MongoDBUploadBackend(AbstractUploadBackend):
         Create new gridFS file which returns a GridIn instance to write
         data to.
         """
-        self.connection = Connection(
-            host=getattr(settings, 'AJAXUPLOAD_MONGODB_HOST', 'localhost'),
-            port=getattr(settings, 'AJAXUPLOAD_MONGODB_PORT', 27017)
-        )[self.db]
+        hosts = getattr(settings, "AJAXUPLOAD_MONGODB_HOST", "localhost")
+        
+        self.connection = Connection(", ".join(hosts))[self.db]
 
         if self.collection:
             self.grid = gridfs.GridFS(self.connection,
